@@ -3,3 +3,6 @@ Project:
     ☐ add repo to kuartzo github account
   App:
     ☐ add hydra flutter login livecycle
+    ☐ notes how to change domain name and create client hydra for new app
+    ☐ replace app name find `navigation_app`
+    ☐ replace ShoppingRouterDelegate
