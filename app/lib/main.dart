@@ -7,7 +7,6 @@ import 'package:uni_links/uni_links.dart';
 import 'app/app.dart';
 // barrel files
 import 'router/router.dart';
-import 'ui/ui.dart';
 
 void main() {
   runApp(MyApp(
@@ -46,7 +45,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     // deepLinks
-    // initPlatformState();
+    initPlatformState();
   }
 
   @override
@@ -94,14 +93,6 @@ class _MyAppState extends State<MyApp> {
         backButtonDispatcher: _backButtonDispatcher,
         // backButtonDispatcher: RootBackButtonDispatcher(),
       ),
-      // child: MaterialApp(
-      //   home: Scaffold(
-      //     appBar: AppBar(
-      //       title: const Text('Plugin example app'),
-      //     ),
-      //     body: Login(key: UniqueKey()),
-      //   ),
-      // ),
     );
   }
 }

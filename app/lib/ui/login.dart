@@ -74,15 +74,17 @@ class _LoginState extends State<Login> {
               ),
               ElevatedButton(
                 child: const Text('Sign in with no code exchange'),
-                onPressed: _signInWithNoCodeExchange,
+                onPressed: () => _signInWithNoCodeExchange(),
               ),
               ElevatedButton(
                 child: const Text('Exchange code'),
-                onPressed: _authorizationCode != null ? _exchangeCode : null,
+                onPressed: _authorizationCode != null
+                    ? () => _exchangeCode(_appState)
+                    : null,
               ),
               ElevatedButton(
                 child: const Text('Sign in with auto code exchange'),
-                onPressed: () => _signInWithAutoCodeExchange(),
+                onPressed: () => _signInWithAutoCodeExchange(_appState),
               ),
               if (Platform.isIOS)
                 Padding(
@@ -92,13 +94,14 @@ class _LoginState extends State<Login> {
                       'Sign in with auto code exchange using ephemeral session (iOS only)',
                       textAlign: TextAlign.center,
                     ),
-                    onPressed: () => _signInWithAutoCodeExchange(
+                    onPressed: () => _signInWithAutoCodeExchange(_appState,
                         preferEphemeralSession: true),
                   ),
                 ),
               ElevatedButton(
                 child: const Text('Refresh token'),
-                onPressed: _refreshToken != null ? _refresh : null,
+                onPressed:
+                    _refreshToken != null ? () => _refresh(_appState) : null,
               ),
               ElevatedButton(
                 child: const Text('End session'),
@@ -165,29 +168,27 @@ class _LoginState extends State<Login> {
     });
   }
 
-  Future<void> _refresh() async {
+  Future<void> _refresh(AppState appState) async {
     try {
       _setBusyState();
-      final TokenResponse? result = await _appAuth.token(TokenRequest(
-          _clientId, _redirectUrl,
+      final result = await _appAuth.token(TokenRequest(_clientId, _redirectUrl,
           refreshToken: _refreshToken, issuer: _issuer, scopes: _scopes));
-      _processTokenResponse(result);
+      _processTokenResponse(appState, result);
       await _testApi(result);
     } catch (_) {
       _clearBusyState();
     }
   }
 
-  Future<void> _exchangeCode() async {
+  Future<void> _exchangeCode(AppState appState) async {
     try {
       _setBusyState();
-      final TokenResponse? result = await _appAuth.token(TokenRequest(
-          _clientId, _redirectUrl,
+      final result = await _appAuth.token(TokenRequest(_clientId, _redirectUrl,
           authorizationCode: _authorizationCode,
           discoveryUrl: _discoveryUrl,
           codeVerifier: _codeVerifier,
           scopes: _scopes));
-      _processTokenResponse(result);
+      _processTokenResponse(appState, result);
       await _testApi(result);
     } catch (_) {
       _clearBusyState();
@@ -198,11 +199,10 @@ class _LoginState extends State<Login> {
     try {
       _setBusyState();
       // use the discovery endpoint to find the configuration
-      final AuthorizationResponse? result = await _appAuth.authorize(
+      final result = await _appAuth.authorize(
         AuthorizationRequest(_clientId, _redirectUrl,
             discoveryUrl: _discoveryUrl, scopes: _scopes, loginHint: 'bob'),
       );
-
       // or just use the issuer
       // var result = await _appAuth.authorize(
       //   AuthorizationRequest(
@@ -220,14 +220,13 @@ class _LoginState extends State<Login> {
     }
   }
 
-  Future<void> _signInWithAutoCodeExchange(
+  Future<void> _signInWithAutoCodeExchange(AppState appState,
       {bool preferEphemeralSession = false}) async {
     try {
       _setBusyState();
 
       // show that we can also explicitly specify the endpoints rather than getting from the details from the discovery document
-      final AuthorizationTokenResponse? result =
-          await _appAuth.authorizeAndExchangeCode(
+      final result = await _appAuth.authorizeAndExchangeCode(
         AuthorizationTokenRequest(
           _clientId,
           _redirectUrl,
@@ -246,7 +245,7 @@ class _LoginState extends State<Login> {
       // );
 
       if (result != null) {
-        _processAuthTokenResponse(result);
+        _processAuthTokenResponse(appState, result);
         await _testApi(result);
       }
     } catch (_) {
@@ -266,13 +265,16 @@ class _LoginState extends State<Login> {
     });
   }
 
-  void _processAuthTokenResponse(AuthorizationTokenResponse response) {
+  void _processAuthTokenResponse(
+      AppState appState, AuthorizationTokenResponse response) {
     setState(() {
       _accessToken = _accessTokenTextController.text = response.accessToken!;
       _idToken = _idTokenTextController.text = response.idToken!;
       _refreshToken = _refreshTokenTextController.text = response.refreshToken!;
       _accessTokenExpirationTextController.text =
           response.accessTokenExpirationDateTime!.toIso8601String();
+      // TODO:
+      // appState.login();
     });
   }
 
@@ -286,13 +288,15 @@ class _LoginState extends State<Login> {
     });
   }
 
-  void _processTokenResponse(TokenResponse? response) {
+  void _processTokenResponse(AppState appState, TokenResponse? response) {
     setState(() {
       _accessToken = _accessTokenTextController.text = response!.accessToken!;
       _idToken = _idTokenTextController.text = response.idToken!;
       _refreshToken = _refreshTokenTextController.text = response.refreshToken!;
       _accessTokenExpirationTextController.text =
           response.accessTokenExpirationDateTime!.toIso8601String();
+      // TODO:
+      // appState.login();
     });
   }
 

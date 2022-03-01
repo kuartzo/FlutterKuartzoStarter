@@ -29,10 +29,11 @@ class OauthClientConstants {
   });
 
   static const OauthClientConstants kuartzo = OauthClientConstants._(
-    clientId: 'oauth-pkce-kuartzo-app',
     issuer: 'https://kuartzo.com:444',
-    redirectUrl: 'com.appauth.demo://deeplinks/callback',
-    postLogoutRedirectUrl: 'com.appauth.demo://deeplinks/endSession',
+    clientId: 'oauth-pkce5',
+    redirectUrl: 'com.appauth.demo://callback',
+    postLogoutRedirectUrl: 'com.appauth.demo://endSession',
+    // don't use deeplinks in login oauth flow
     discoveryUrl: 'https://kuartzo.com:444/.well-known/openid-configuration',
     authorizationEndpoint: 'https://kuartzo.com:444/oauth2/auth',
     tokenEndpoint: 'https://kuartzo.com:444/oauth2/token',

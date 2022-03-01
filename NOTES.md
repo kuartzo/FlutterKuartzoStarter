@@ -45,13 +45,80 @@ $ adb shell -s 192.168.1.171:43431 'am start -W -a android.intent.action.VIEW -c
 
 ##  Fix OAuth2 Redirect with DeepLinks and navigation 2.0
 
-problem redirect to `/login` weblink
+problem redirect to `/login` deeplink
 
-get 
-location:com.appauth.demo://weblinks/callback?code=py6V1XlOAczAoQb6mZ56hBW2Lwxn6aqpmSZqKWh-1zI.aXE4DeCw9uKJRUIlxaOmUPwi8UCnTB7_yanun0qkBko&scope=openid+profile+email+offline_access&state=2FHW7odtTEcGC_-EPfhYVg
-      but keeps in same screen seems a deep link problem or a sort of
+seems that after change `appAuthRedirectScheme: 'com.redirectScheme.comm'` to `appAuthRedirectScheme: 'com.appauth.demo'` and with deeplinks disabled `// initPlatformState();` oauth redirect starts to work with old `oauth-pkce5` tested client
 
-      the problem of keeps stoped on redirect was bad android:scheme after change to android:scheme="com.appauth.demo" it redirect to splash
+`app/lib/app/oauth_client_constants.dart`
+
+```dart
+  static const OauthClientConstants kuartzo = OauthClientConstants._(
+    issuer: 'https://kuartzo.com:444',
+    clientId: 'oauth-pkce5',
+    redirectUrl: 'com.appauth.demo://callback',
+    postLogoutRedirectUrl: 'com.appauth.demo://endSession',
+    // clientId: 'oauth-pkce-kuartzo-app',
+    // redirectUrl: 'com.appauth.demo://deeplinks/callback',
+    // postLogoutRedirectUrl: 'com.appauth.demo://deeplinks/endSession',
+```
+
+`app/android/app/build.gradle`
+
+```
+{
+    ...
+    defaultConfig {
+        ...
+        // place correct redirectScheme~
+        manifestPlaceholders = [
+            appAuthRedirectScheme: 'com.redirectScheme.comm',
+            applicationName: "android.app.Application"
+        ]
+    }
+
+    buildTypes {
+        release {
+            // TODO: Add your own signing config for the release build.
+            // Signing with the debug keys for now, so `flutter run --release` works.
+            signingConfig signingConfigs.debug
+        }
+    }
+}
+```
+
+```
+{
+    ...
+    defaultConfig {
+        ...
+        // place correct redirectScheme~
+        manifestPlaceholders = [
+            appAuthRedirectScheme: 'com.appauth.demo'
+        ]
+    }
+
+    buildTypes {
+        release {
+            // TODO: Add your own signing config for the release build.
+            // Signing with the debug keys for now, so `flutter run --release` works.
+            signingConfig signingConfigs.debug
+            manifestPlaceholders = [applicationName: "android.app.Application"]
+        }
+        debug {
+            manifestPlaceholders = [applicationName: "android.app.Application"]
+        }
+        build{
+            manifestPlaceholders = [applicationName: "android.app.Application"]
+        }
+    }
+}
+```
+
+try enabled deeplinks uncomment `initPlatformState();`
+
+it works with deepLinks, great
+
+now try uncomment deepLink in `AndroidManifest.xml`
 
 change `app/android/app/src/main/AndroidManifest.xml` to 
 
@@ -68,3 +135,44 @@ change `app/android/app/src/main/AndroidManifest.xml` to
     </intent-filter>
 </activity>
 ```
+
+run app and test some deeplinks with
+
+```shell
+# details/1
+$ adb -s 192.168.1.171:43431 shell 'am start -W -a android.intent.action.VIEW -c android.intent.category.BROWSABLE -d "com.appauth.demo://deeplinks/details/1"'
+```
+
+## Find the Magix Trick to put Callbak working
+
+is just don't use deeplinks in callback ex `com.appauth.demo://deeplinks/callback` will not work because it will pass into `app/lib/router/router_delegate.dart` in method `void parseRoute(Uri uri)`, and that is the reason why we lost oauth flow and redirect, if we use `com.appauth.demo://callback` like we use in `oauth-pkce5` it work without issues, some persistence, lucky and some dispair always help
+
+to prove that will fail change
+
+`app/lib/app/oauth_client_constants.dart`
+
+```dart
+  static const OauthClientConstants kuartzo = OauthClientConstants._(
+    issuer: 'https://kuartzo.com:444',
+    // clientId: 'oauth-pkce5',
+    // redirectUrl: 'com.appauth.demo://callback',
+    // postLogoutRedirectUrl: 'com.appauth.demo://endSession',
+    clientId: 'oauth-pkce-kuartzo-app',
+    redirectUrl: 'com.appauth.demo://deeplinks/callback',
+    postLogoutRedirectUrl: 'com.appauth.demo://deeplinks/endSession',
+```
+
+and try, we see that it will pass in `app/lib/router/router_delegate.dart` in method `void parseRoute(Uri uri)` losting the flow
+
+```dart
+  // Parse Deep Link URI
+  void parseRoute(Uri uri) {
+    ...
+      switch (path) {
+        ...
+        case 'login':
+        case 'callback':
+          replaceAll(LoginPageConfig);
+```
+
+done with login flow at last......until next hole we have road to walk again

@@ -1,4 +1,4 @@
-package com.appauth.demo_app
+package com.appauth.demo
 
 import io.flutter.embedding.android.FlutterActivity
 

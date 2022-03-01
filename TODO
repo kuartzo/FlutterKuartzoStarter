@@ -2,6 +2,7 @@ Project:
   Misc:
     ☐ add repo to kuartzo github account
   App:
+    ☐ @critical after work on `main.dart` change `com.appauth.demo` to `com.kuartzo.flutter-starter`
     ☐ add hydra flutter login livecycle
     ☐ notes how to change domain name and create client hydra for new app
     ☐ replace app name find `navigation_app`

@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.appauth.demo_app">
+	package="com.appauth.demo">
 	<!-- io.flutter.app.FlutterApplication is an android.app.Application that
 		calls FlutterMain.startInitialization(this); in its onCreate method.
 		In most cases you can leave this as-is, but you if you want to provide
@@ -43,7 +43,7 @@
 				<action android:name="android.intent.action.VIEW" />
 				<category android:name="android.intent.category.DEFAULT" />
 				<category android:name="android.intent.category.BROWSABLE" />
-				<!-- Note: scheme matching in the Android framework is case-sensitive, unlike the RFC. As a result, you should always specify schemes using lowercase letters. -->
+			<!-- Note: scheme matching in the Android framework is case-sensitive, unlike the RFC. As a result, you should always specify schemes using lowercase letters. -->
 				<data
 					android:scheme="com.appauth.demo"
 					android:host="deeplinks" />
