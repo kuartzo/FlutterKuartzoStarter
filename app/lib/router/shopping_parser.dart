@@ -35,6 +35,7 @@ class ShoppingParser extends RouteInformationParser<PageConfiguration> {
       case SplashPath:
         return SplashPageConfig;
       case LoginPath:
+      case CallbackPath:
         return LoginPageConfig;
       case CreateAccountPath:
         return CreateAccountPageConfig;

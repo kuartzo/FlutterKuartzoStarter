@@ -1,4 +1,4 @@
-package com.raywenderlich.navigation_app
+package com.appauth.demo_app
 
 import io.flutter.embedding.android.FlutterActivity
 

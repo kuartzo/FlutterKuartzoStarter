@@ -113,6 +113,10 @@ class AppState extends ChangeNotifier {
 
   void getLoggedInState() async {
     final prefs = await SharedPreferences.getInstance();
-    _loggedIn = prefs.getBool(LoggedInKey)!;
+    if (prefs.getBool(LoggedInKey) != null) {
+      _loggedIn = prefs.getBool(LoggedInKey)!;
+    } else {
+      _loggedIn = false;
+    }
   }
 }

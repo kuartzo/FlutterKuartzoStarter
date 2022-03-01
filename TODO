@@ -6,3 +6,4 @@ Project:
     ☐ notes how to change domain name and create client hydra for new app
     ☐ replace app name find `navigation_app`
     ☐ replace ShoppingRouterDelegate
+    ☐ request healthCheckApiEndpoint after retrive token

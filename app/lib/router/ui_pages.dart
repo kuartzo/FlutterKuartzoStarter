@@ -6,6 +6,7 @@ import '../app/app_state.dart';
 // The constants above define the paths or routes of each screen.
 const String SplashPath = '/splash';
 const String LoginPath = '/login';
+const String CallbackPath = '/callback';
 const String CreateAccountPath = '/createAccount';
 const String ListItemsPath = '/listItems';
 const String DetailsPath = '/details';
@@ -17,6 +18,7 @@ const String SettingsPath = '/settings';
 enum Pages {
   Splash,
   Login,
+  Callback,
   CreateAccount,
   List,
   Details,
@@ -51,6 +53,13 @@ final PageConfiguration LoginPageConfig = PageConfiguration(
   uiPage: Pages.Login,
   currentPageAction: null,
 );
+
+// final PageConfiguration CallbackPageConfig = PageConfiguration(
+//   key: 'Callback',
+//   path: CallbackPath,
+//   uiPage: Pages.Login,
+//   currentPageAction: null,
+// );
 
 final PageConfiguration CreateAccountPageConfig = PageConfiguration(
   key: 'CreateAccount',

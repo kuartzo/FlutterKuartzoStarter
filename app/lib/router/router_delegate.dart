@@ -116,8 +116,12 @@ class ShoppingRouterDelegate extends RouterDelegate<PageConfiguration>
           _addPageData(Splash(key: UniqueKey()), SplashPageConfig);
           break;
         case Pages.Login:
+        case Pages.Callback:
           _addPageData(Login(key: UniqueKey()), LoginPageConfig);
           break;
+        // case Pages.Callback:
+        //   _addPageData(Login(key: UniqueKey()), CallbackPageConfig);
+        //   break;
         case Pages.CreateAccount:
           _addPageData(
               CreateAccount(key: UniqueKey()), CreateAccountPageConfig);
@@ -307,6 +311,7 @@ class ShoppingRouterDelegate extends RouterDelegate<PageConfiguration>
           replaceAll(SplashPageConfig);
           break;
         case 'login':
+        case 'callback':
           replaceAll(LoginPageConfig);
           break;
         case 'createAccount':

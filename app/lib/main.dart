@@ -7,6 +7,7 @@ import 'package:uni_links/uni_links.dart';
 import 'app/app.dart';
 // barrel files
 import 'router/router.dart';
+import 'ui/ui.dart';
 
 void main() {
   runApp(MyApp(
@@ -31,8 +32,6 @@ class _MyAppState extends State<MyApp> {
   late ShoppingBackButtonDispatcher _backButtonDispatcher;
   // deeplinks _linkSubscription is a StreamSubscription for listening to incoming links. Call .cancel() on it to dispose of the stream.
   late StreamSubscription _linkSubscription;
-  // constants
-  // final OauthClientConstants _oauthConstants = OauthClientConstants.kuartzo;
 
   _MyAppState() {
     // Create the delegate with the appState field
@@ -47,7 +46,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     // deepLinks
-    initPlatformState();
+    // initPlatformState();
   }
 
   @override
@@ -62,6 +61,7 @@ class _MyAppState extends State<MyApp> {
     // Attach a listener to the Uri links stream
     // Initialize StreamSubscription by listening for any deep link events.
     _linkSubscription = uriLinkStream.listen((Uri? uri) {
+      print('deepLinks received uri: [$uri]');
       if (!mounted) return;
       setState(() {
         // Have the app's delegate parse the uri and then navigate using the previously defined parseRoute.
@@ -94,6 +94,14 @@ class _MyAppState extends State<MyApp> {
         backButtonDispatcher: _backButtonDispatcher,
         // backButtonDispatcher: RootBackButtonDispatcher(),
       ),
+      // child: MaterialApp(
+      //   home: Scaffold(
+      //     appBar: AppBar(
+      //       title: const Text('Plugin example app'),
+      //     ),
+      //     body: Login(key: UniqueKey()),
+      //   ),
+      // ),
     );
   }
 }
