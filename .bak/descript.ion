@@ -1,1 +1,2 @@
 2022-03-01-18-45.tgz  first working version of oauth working with deeplinks and navigation 2.0, start to clean code and commit
+2022-03-01-19-42.tgz  awesome android oauth flow working and already calls appState.login(); in methods where we have the _accessToken and _idToken, everything works even the refreshToken, only exchange code don't work, thankfully we don't need it
