@@ -107,7 +107,7 @@ class _LoginState extends State<Login> {
                 child: const Text('End session'),
                 onPressed: _idToken != null
                     ? () async {
-                        await _endSession();
+                        await _endSession(_appState);
                       }
                     : null,
               ),
@@ -140,7 +140,7 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Future<void> _endSession() async {
+  Future<void> _endSession(AppState appState) async {
     try {
       _setBusyState();
       await _appAuth.endSession(EndSessionRequest(
@@ -148,6 +148,7 @@ class _LoginState extends State<Login> {
           postLogoutRedirectUrl: _postLogoutRedirectUrl,
           serviceConfiguration: _serviceConfiguration));
       _clearSessionInfo();
+      appState.logout();
     } catch (_) {}
     _clearBusyState();
   }
@@ -273,8 +274,9 @@ class _LoginState extends State<Login> {
       _refreshToken = _refreshTokenTextController.text = response.refreshToken!;
       _accessTokenExpirationTextController.text =
           response.accessTokenExpirationDateTime!.toIso8601String();
-      // TODO:
-      // appState.login();
+      // call appState.login
+      appState.login(OAuthResponse(_accessToken, _idToken, _refreshToken,
+          response.accessTokenExpirationDateTime!.toIso8601String()));
     });
   }
 
@@ -295,8 +297,9 @@ class _LoginState extends State<Login> {
       _refreshToken = _refreshTokenTextController.text = response.refreshToken!;
       _accessTokenExpirationTextController.text =
           response.accessTokenExpirationDateTime!.toIso8601String();
-      // TODO:
-      // appState.login();
+      // call appState.login
+      appState.login(OAuthResponse(_accessToken, _idToken, _refreshToken,
+          response.accessTokenExpirationDateTime!.toIso8601String()));
     });
   }
 

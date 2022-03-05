@@ -32,7 +32,10 @@ dependencies:
   provider: ^6.0.2
   uni_links: ^0.5.1
   flutter_appauth: ^2.4.0
+  # TODO: remove http
   http: ^0.13.4
+  dio: ^4.0.4
+  fluttertoast: ^8.0.9
 
 dev_dependencies:
   flutter_test:

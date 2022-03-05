@@ -2,7 +2,9 @@ Project:
   Misc:
     ☐ add repo to kuartzo github account
   App:
+    ☐ @critical use await _testApi(result);
     ☐ @critical after work on `main.dart` change `com.appauth.demo` to `com.kuartzo.flutter-starter`
+    ☐ @critical remove note used files like app/lib/ui/create_account.dart etc
     ☐ add hydra flutter login livecycle
     ☐ notes how to change domain name and create client hydra for new app
     ☐ replace app name find `navigation_app`

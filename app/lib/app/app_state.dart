@@ -3,7 +3,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../router/ui_pages.dart';
 
-const String LoggedInKey = 'LoggedIn';
+const String loggedInKey = 'loggedIn';
+const String accessTokenKey = 'accessToken';
+const String idTokenKey = 'idToken';
+const String refreshTokenKey = 'refreshToken';
+const String accessTokenExpirationDateTimeKey = 'accessTokenExpirationDateTime';
 
 // defines what types of page states the app can be in.
 // If the app is in the none state, nothing needs to be done.
@@ -27,6 +31,16 @@ class PageAction {
       this.widget = null});
 }
 
+class OAuthResponse {
+  String? accessToken;
+  String? idToken;
+  String? refreshToken;
+  String? accessTokenExpirationDateTime;
+
+  OAuthResponse(this.accessToken, this.idToken, this.refreshToken,
+      this.accessTokenExpirationDateTime);
+}
+
 // AppState. This class holds the logged-in flag, shopping cart items and current page action
 class AppState extends ChangeNotifier {
   bool _loggedIn = false;
@@ -40,6 +54,9 @@ class AppState extends ChangeNotifier {
   String? emailAddress;
 
   String? password;
+
+  OAuthResponse? _oAuthResponse;
+  OAuthResponse? get oAuthResponse => _oAuthResponse;
 
   PageAction _currentAction = PageAction();
   PageAction get currentAction => _currentAction;
@@ -90,9 +107,10 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void login() {
+  void login(OAuthResponse oAuthResponse) {
     _loggedIn = true;
-    saveLoginState(loggedIn);
+    _oAuthResponse = oAuthResponse;
+    saveLoginState(loggedIn, oAuthResponse);
     _currentAction =
         PageAction(state: PageState.replaceAll, page: ListItemsPageConfig);
     notifyListeners();
@@ -106,15 +124,30 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void saveLoginState(bool loggedIn) async {
+  void saveLoginState(bool loggedIn, [OAuthResponse? oAuthResponse]) async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setBool(LoggedInKey, loggedIn);
+    prefs.setBool(loggedInKey, loggedIn);
+    if (loggedIn) {
+      prefs.setString(accessTokenKey, oAuthResponse?.accessToken ?? '');
+      prefs.setString(idTokenKey, oAuthResponse?.idToken ?? '');
+      prefs.setString(refreshTokenKey, oAuthResponse?.refreshToken ?? '');
+      prefs.setString(accessTokenExpirationDateTimeKey,
+          oAuthResponse?.accessTokenExpirationDateTime ?? '');
+    } else {
+      prefs.clear();
+    }
   }
 
   void getLoggedInState() async {
     final prefs = await SharedPreferences.getInstance();
-    if (prefs.getBool(LoggedInKey) != null) {
-      _loggedIn = prefs.getBool(LoggedInKey)!;
+    if (prefs.getBool(loggedInKey) != null) {
+      _loggedIn = prefs.getBool(loggedInKey)!;
+      _oAuthResponse = OAuthResponse(
+          prefs.getString(accessTokenKey),
+          prefs.getString(idTokenKey),
+          prefs.getString(refreshTokenKey),
+          prefs.getString(accessTokenExpirationDateTimeKey));
+      // print('idToken: ${_oAuthResponse?.idToken}');
     } else {
       _loggedIn = false;
     }

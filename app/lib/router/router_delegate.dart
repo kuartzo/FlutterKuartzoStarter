@@ -119,13 +119,14 @@ class ShoppingRouterDelegate extends RouterDelegate<PageConfiguration>
         case Pages.Callback:
           _addPageData(Login(key: UniqueKey()), LoginPageConfig);
           break;
+        // TODO:
         // case Pages.Callback:
         //   _addPageData(Login(key: UniqueKey()), CallbackPageConfig);
         //   break;
-        case Pages.CreateAccount:
-          _addPageData(
-              CreateAccount(key: UniqueKey()), CreateAccountPageConfig);
-          break;
+        // case Pages.CreateAccount:
+        //   _addPageData(
+        //       CreateAccount(key: UniqueKey()), CreateAccountPageConfig);
+        //   break;
         case Pages.List:
           _addPageData(ListItems(key: UniqueKey()), ListItemsPageConfig);
           break;
@@ -314,15 +315,16 @@ class ShoppingRouterDelegate extends RouterDelegate<PageConfiguration>
         case 'callback':
           replaceAll(LoginPageConfig);
           break;
-        case 'createAccount':
-          // In this case and other cases, push the pages necessary to navigate to the
-          // destination using setPath.
-          setPath([
-            _createPage(Login(key: UniqueKey()), LoginPageConfig),
-            _createPage(
-                CreateAccount(key: UniqueKey()), CreateAccountPageConfig)
-          ]);
-          break;
+        // TODO:
+        // case 'createAccount':
+        //   // In this case and other cases, push the pages necessary to navigate to the
+        //   // destination using setPath.
+        //   setPath([
+        //     _createPage(Login(key: UniqueKey()), LoginPageConfig),
+        //     _createPage(
+        //         CreateAccount(key: UniqueKey()), CreateAccountPageConfig)
+        //   ]);
+        //   break;
         case 'listItems':
           replaceAll(ListItemsPageConfig);
           break;
