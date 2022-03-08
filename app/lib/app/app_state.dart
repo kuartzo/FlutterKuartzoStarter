@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../router/ui_pages.dart';
 
@@ -51,9 +52,8 @@ class AppState extends ChangeNotifier {
 
   final cartItems = [];
 
-  String? emailAddress;
-
-  String? password;
+  // ignore: prefer_const_constructors
+  final _storage = FlutterSecureStorage();
 
   OAuthResponse? _oAuthResponse;
   OAuthResponse? get oAuthResponse => _oAuthResponse;
@@ -125,31 +125,48 @@ class AppState extends ChangeNotifier {
   }
 
   void saveLoginState(bool loggedIn, [OAuthResponse? oAuthResponse]) async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setBool(loggedInKey, loggedIn);
+    await _storage.write(key: loggedInKey, value: loggedIn ? 'true' : 'false');
     if (loggedIn) {
-      prefs.setString(accessTokenKey, oAuthResponse?.accessToken ?? '');
-      prefs.setString(idTokenKey, oAuthResponse?.idToken ?? '');
-      prefs.setString(refreshTokenKey, oAuthResponse?.refreshToken ?? '');
-      prefs.setString(accessTokenExpirationDateTimeKey,
-          oAuthResponse?.accessTokenExpirationDateTime ?? '');
+      await _storage.write(
+          key: accessTokenKey,
+          value: oAuthResponse?.accessToken ?? '',
+          aOptions: _getAndroidOptions());
+      await _storage.write(
+          key: idTokenKey,
+          value: oAuthResponse?.idToken ?? '',
+          aOptions: _getAndroidOptions());
+      await _storage.write(
+          key: refreshTokenKey,
+          value: oAuthResponse?.refreshToken ?? '',
+          aOptions: _getAndroidOptions());
+      await _storage.write(
+          key: accessTokenExpirationDateTimeKey,
+          value: oAuthResponse?.accessTokenExpirationDateTime ?? '',
+          aOptions: _getAndroidOptions());
     } else {
-      prefs.clear();
+      await _storage.deleteAll();
     }
   }
 
   void getLoggedInState() async {
-    final prefs = await SharedPreferences.getInstance();
-    if (prefs.getBool(loggedInKey) != null) {
-      _loggedIn = prefs.getBool(loggedInKey)!;
-      _oAuthResponse = OAuthResponse(
-          prefs.getString(accessTokenKey),
-          prefs.getString(idTokenKey),
-          prefs.getString(refreshTokenKey),
-          prefs.getString(accessTokenExpirationDateTimeKey));
-      // print('idToken: ${_oAuthResponse?.idToken}');
+    final allValues = await _storage.readAll(aOptions: _getAndroidOptions());
+    if (allValues.containsKey(loggedInKey)) {
+      _loggedIn = allValues[loggedInKey] == 'true';
+      if (_loggedIn) {
+        _oAuthResponse = OAuthResponse(
+            allValues[accessTokenKey],
+            allValues[idTokenKey],
+            allValues[refreshTokenKey],
+            allValues[accessTokenExpirationDateTimeKey]);
+        print('idToken: ${_oAuthResponse?.idToken}');
+      }
     } else {
       _loggedIn = false;
     }
   }
+
+  // secure storage
+  AndroidOptions _getAndroidOptions() => const AndroidOptions(
+        encryptedSharedPreferences: true,
+      );
 }

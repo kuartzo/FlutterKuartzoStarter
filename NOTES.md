@@ -1,5 +1,18 @@
 # NOTES
 
+## Links
+
+### Secure Storage
+
+- [Error Happened](http://- [Securing local storage in Flutter - LogRocket Blog](https://blog.logrocket.com/securing-local-storage-flutter/))
+
+don't forget to add `android:allowBackup="true"`
+### Biometrics
+
+- [How to Authenticate with Biometrics, Pin and Pattern in Flutter](https://www.fluttercampus.com/guide/122/how-to-authenticate-with-biometrics-pi-and-pattern-in-flutter-app/)
+
+<uses-permission android:name="android.permission.USE_FINGERPRINT"/>
+
 ## Create Ory Hydra OAuth2 Client
 
 ```shell
