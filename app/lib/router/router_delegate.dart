@@ -116,17 +116,8 @@ class ShoppingRouterDelegate extends RouterDelegate<PageConfiguration>
           _addPageData(Splash(key: UniqueKey()), SplashPageConfig);
           break;
         case Pages.Login:
-        case Pages.Callback:
           _addPageData(Login(key: UniqueKey()), LoginPageConfig);
           break;
-        // TODO:
-        // case Pages.Callback:
-        //   _addPageData(Login(key: UniqueKey()), CallbackPageConfig);
-        //   break;
-        // case Pages.CreateAccount:
-        //   _addPageData(
-        //       CreateAccount(key: UniqueKey()), CreateAccountPageConfig);
-        //   break;
         case Pages.List:
           _addPageData(ListItems(key: UniqueKey()), ListItemsPageConfig);
           break;
@@ -144,6 +135,9 @@ class ShoppingRouterDelegate extends RouterDelegate<PageConfiguration>
               pageConfig.currentPageAction!.widget != null) {
             _addPageData(pageConfig.currentPageAction!.widget!, pageConfig);
           }
+          break;
+        case Pages.ScanQRCode:
+          _addPageData(ScanQRCode(key: UniqueKey()), ScanQRCodePageConfig);
           break;
         default:
           break;
@@ -217,9 +211,9 @@ class ShoppingRouterDelegate extends RouterDelegate<PageConfiguration>
       case Pages.Login:
         LoginPageConfig.currentPageAction = action;
         break;
-      case Pages.CreateAccount:
-        CreateAccountPageConfig.currentPageAction = action;
-        break;
+      // case Pages.CreateAccount:
+      //   CreateAccountPageConfig.currentPageAction = action;
+      //   break;
       case Pages.List:
         ListItemsPageConfig.currentPageAction = action;
         break;
@@ -234,6 +228,9 @@ class ShoppingRouterDelegate extends RouterDelegate<PageConfiguration>
         break;
       case Pages.Details:
         DetailsPageConfig.currentPageAction = action;
+        break;
+      case Pages.ScanQRCode:
+        SettingsPageConfig.currentPageAction = action;
         break;
       default:
         break;
@@ -312,7 +309,6 @@ class ShoppingRouterDelegate extends RouterDelegate<PageConfiguration>
           replaceAll(SplashPageConfig);
           break;
         case 'login':
-        case 'callback':
           replaceAll(LoginPageConfig);
           break;
         // TODO:
@@ -344,6 +340,13 @@ class ShoppingRouterDelegate extends RouterDelegate<PageConfiguration>
           setPath([
             _createPage(ListItems(key: UniqueKey()), ListItemsPageConfig),
             _createPage(Settings(key: UniqueKey()), SettingsPageConfig)
+          ]);
+          break;
+        case 'scanQRCode':
+          setPath([
+            _createPage(ListItems(key: UniqueKey()), ListItemsPageConfig),
+            _createPage(Settings(key: UniqueKey()), SettingsPageConfig),
+            _createPage(ScanQRCode(key: UniqueKey()), ScanQRCodePageConfig)
           ]);
           break;
       }

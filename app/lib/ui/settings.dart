@@ -8,6 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../app/app_constants.dart';
 import '../app/app_state.dart';
 import '../dto/user_dto.dart';
+import '../router/router.dart';
 
 class Settings extends StatelessWidget {
   const Settings({required Key key}) : super(key: key);
@@ -35,6 +36,13 @@ class Settings extends StatelessWidget {
                   appState.logout();
                 },
                 child: const Text('Log Out'),
+              ),
+              ElevatedButton(
+                onPressed: () => appState.currentAction = PageAction(
+                  state: PageState.addPage,
+                  page: ScanQRCodePageConfig,
+                ),
+                child: const Text('Scan QR Code'),
               ),
               ElevatedButton(
                 onPressed: () async {

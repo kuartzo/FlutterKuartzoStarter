@@ -35,10 +35,9 @@ class ShoppingParser extends RouteInformationParser<PageConfiguration> {
       case SplashPath:
         return SplashPageConfig;
       case LoginPath:
-      case CallbackPath:
         return LoginPageConfig;
-      case CreateAccountPath:
-        return CreateAccountPageConfig;
+      // case CreateAccountPath:
+      //   return CreateAccountPageConfig;
       case ListItemsPath:
         return ListItemsPageConfig;
       case DetailsPath:
@@ -49,6 +48,8 @@ class ShoppingParser extends RouteInformationParser<PageConfiguration> {
         return CheckoutPageConfig;
       case SettingsPath:
         return SettingsPageConfig;
+      case ScanQRCodePath:
+        return ScanQRCodePageConfig;
       default:
         return SplashPageConfig;
     }
@@ -73,8 +74,8 @@ class ShoppingParser extends RouteInformationParser<PageConfiguration> {
         return const RouteInformation(location: SplashPath);
       case Pages.Login:
         return const RouteInformation(location: LoginPath);
-      case Pages.CreateAccount:
-        return const RouteInformation(location: CreateAccountPath);
+      // case Pages.CreateAccount:
+      //   return const RouteInformation(location: CreateAccountPath);
       case Pages.List:
         return const RouteInformation(location: ListItemsPath);
       case Pages.Details:
@@ -85,6 +86,8 @@ class ShoppingParser extends RouteInformationParser<PageConfiguration> {
         return const RouteInformation(location: CheckoutPath);
       case Pages.Settings:
         return const RouteInformation(location: SettingsPath);
+      case Pages.ScanQRCode:
+        return const RouteInformation(location: ScanQRCodePath);
       default:
         //  in case there are no matches for uiPage, always show splash
         return const RouteInformation(location: SplashPath);

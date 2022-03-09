@@ -1,5 +1,6 @@
 {
   "dart.openDevTools": "never",
+  "dart.flutterHotReloadOnSave": "always",
   "cSpell.words": [
     "appauth",
     "deeplinks",
@@ -7,6 +8,7 @@
     "kuartzo",
     "navapp",
     "pkce",
+    "qrcode",
     "raywenderlich",
     "Razeware"
   ],

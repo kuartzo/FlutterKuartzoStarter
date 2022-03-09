@@ -3,16 +3,18 @@ import 'package:flutter/cupertino.dart';
 
 import '../app/app_state.dart';
 
+// TODO: to create a new page find occurences of CreateAccount
+
 // The constants above define the paths or routes of each screen.
 const String SplashPath = '/splash';
 const String LoginPath = '/login';
-const String CallbackPath = '/callback';
-const String CreateAccountPath = '/createAccount';
+// const String CreateAccountPath = '/createAccount';
 const String ListItemsPath = '/listItems';
 const String DetailsPath = '/details';
 const String CartPath = '/cart';
 const String CheckoutPath = '/checkout';
 const String SettingsPath = '/settings';
+const String ScanQRCodePath = '/scanQRCode';
 
 // It’s important to represent the UI for each page. This is done with an enum
 enum Pages {
@@ -24,7 +26,8 @@ enum Pages {
   Details,
   Cart,
   Checkout,
-  Settings
+  Settings,
+  ScanQRCode,
 }
 
 class PageConfiguration {
@@ -54,19 +57,12 @@ final PageConfiguration LoginPageConfig = PageConfiguration(
   currentPageAction: null,
 );
 
-// final PageConfiguration CallbackPageConfig = PageConfiguration(
-//   key: 'Callback',
-//   path: CallbackPath,
-//   uiPage: Pages.Login,
+// final PageConfiguration CreateAccountPageConfig = PageConfiguration(
+//   key: 'CreateAccount',
+//   path: CreateAccountPath,
+//   uiPage: Pages.CreateAccount,
 //   currentPageAction: null,
 // );
-
-final PageConfiguration CreateAccountPageConfig = PageConfiguration(
-  key: 'CreateAccount',
-  path: CreateAccountPath,
-  uiPage: Pages.CreateAccount,
-  currentPageAction: null,
-);
 
 final PageConfiguration ListItemsPageConfig = PageConfiguration(
   key: 'ListItems',
@@ -100,5 +96,13 @@ final PageConfiguration SettingsPageConfig = PageConfiguration(
   key: 'Settings',
   path: SettingsPath,
   uiPage: Pages.Settings,
+  currentPageAction: null,
+);
+
+final PageConfiguration ScanQRCodePageConfig = PageConfiguration(
+  key: 'ScanQRCode',
+  path: ScanQRCodePath,
+  uiPage: Pages.ScanQRCode,
+  // uiPage: Pages.Checkout,
   currentPageAction: null,
 );

@@ -194,179 +194,145 @@ class _LoginState extends State<Login> {
     // provider
     final _appState = Provider.of<AppState>(context, listen: false);
 
-    final nonAuthorizedWidget = Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
-        // const Divider(height: 20),
-        if (_supportState == _SupportState.unknown)
-          const CircularProgressIndicator()
-        else if (_supportState == _SupportState.supported)
-          const Text(
-            'This device is supported',
-            textAlign: TextAlign.center,
-          )
-        else
-          const Text(
-            'This device is not supported',
-            textAlign: TextAlign.center,
-          ),
-        const Divider(height: 20),
-        Text(
-          'Can check biometrics: $_canCheckBiometrics\n',
-          textAlign: TextAlign.center,
-        ),
-        ElevatedButton(
-          child: const Text('Check biometrics'),
-          onPressed: _checkBiometrics,
-        ),
-        const Divider(height: 20),
-        Text(
-          'Available biometrics:\n$_availableBiometrics\n',
-          textAlign: TextAlign.center,
-        ),
-        ElevatedButton(
-          child: const Text(
-            'Get available biometrics',
-            textAlign: TextAlign.center,
-          ),
-          onPressed: _getAvailableBiometrics,
-        ),
-        const Divider(height: 20),
-        Text(
-          'Current State: $_authorized\n',
-          textAlign: TextAlign.center,
-        ),
-        if (_isAuthenticating)
-          ElevatedButton(
-            onPressed: _cancelAuthentication,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: const <Widget>[
-                Text('Cancel Authentication'),
-                Icon(Icons.cancel),
-              ],
-            ),
-          ),
-        if (!_isAuthenticating && _authorized != 'Authorized')
-          // Column(
-          //   children: <Widget>[
-          ElevatedButton(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: const <Widget>[
-                Text('Authenticate'),
-                Icon(Icons.perm_device_information),
-              ],
-            ),
-            onPressed: _authenticate,
-          ),
-        ElevatedButton(
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text(_isAuthenticating
-                  ? 'Cancel'
-                  : 'Authenticate: biometrics only'),
-              const Icon(Icons.fingerprint),
-            ],
-          ),
-          onPressed: _authenticateWithBiometrics,
-        ),
-      ],
-    );
-
-    final authorizedWidget = Column(
-      children: [
-        ElevatedButton(
-          child: const Text('Sign in with no code exchange'),
-          onPressed: () => _signInWithNoCodeExchange(),
-        ),
-        ElevatedButton(
-          child: const Text('Exchange code'),
-          onPressed: _authorizationCode != null
-              ? () => _exchangeCode(_appState)
-              : null,
-        ),
-        ElevatedButton(
-          child: const Text('Sign in with auto code exchange'),
-          onPressed: () => _signInWithAutoCodeExchange(_appState),
-        ),
-        if (Platform.isIOS)
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(
-              child: const Text(
-                'Sign in with auto code exchange using ephemeral session (iOS only)',
-                textAlign: TextAlign.center,
-              ),
-              onPressed: () => _signInWithAutoCodeExchange(_appState,
-                  preferEphemeralSession: true),
-            ),
-          ),
-        ElevatedButton(
-          child: const Text('Refresh token'),
-          onPressed: _refreshToken != null ? () => _refresh(_appState) : null,
-        ),
-        ElevatedButton(
-          child: const Text('End session'),
-          onPressed: _idToken != null
-              ? () async {
-                  await _endSession(_appState);
-                }
-              : null,
-        ),
-        const Text('authorization code'),
-        TextField(
-          controller: _authorizationCodeTextController,
-        ),
-        const Text('access token'),
-        TextField(
-          controller: _accessTokenTextController,
-        ),
-        const Text('access token expiration'),
-        TextField(
-          controller: _accessTokenExpirationTextController,
-        ),
-        const Text('id token'),
-        TextField(
-          controller: _idTokenTextController,
-        ),
-        const Text('refresh token'),
-        TextField(
-          controller: _refreshTokenTextController,
-        ),
-        const Text('test api results'),
-        Text(_userInfo ?? ''),
-      ],
-    );
-
-    final showWidget =
-        (_authorized == 'Authorized') ? authorizedWidget : nonAuthorizedWidget;
-
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Authentication/ Login'),
         ),
-        body: SafeArea(
-          child: Container(
-            // color: Colors.grey[300],
-            alignment: Alignment.center,
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Visibility(
-                      visible: _isBusy,
-                      child: const LinearProgressIndicator(),
-                    ),
-                    showWidget,
-                  ],
-                ),
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Visibility(
+                visible: _isBusy,
+                child: const LinearProgressIndicator(),
               ),
-            ),
+              // if (_supportState == _SupportState.unknown)
+              //   const CircularProgressIndicator()
+              // else if (_supportState == _SupportState.supported)
+              //   const Text('This device is supported')
+              // else
+              //   const Text('This device is not supported'),
+              // const Divider(height: 20),
+              // Text('Can check biometrics: $_canCheckBiometrics\n'),
+              // ElevatedButton(
+              //   child: const Text('Check biometrics'),
+              //   onPressed: _checkBiometrics,
+              // ),
+              // const Divider(height: 20),
+              // Text('Available biometrics: $_availableBiometrics\n'),
+              // ElevatedButton(
+              //   child: const Text('Get available biometrics'),
+              //   onPressed: _getAvailableBiometrics,
+              // ),
+              // const Divider(height: 20),
+              // Text('Current State: $_authorized\n'),
+              if (_isAuthenticating)
+                ElevatedButton(
+                  onPressed: _cancelAuthentication,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: const <Widget>[
+                      Text('Cancel Authentication'),
+                      Icon(Icons.cancel),
+                    ],
+                  ),
+                ),
+              if (!_isAuthenticating && _authorized != 'Authorized')
+                // Column(
+                //   children: <Widget>[
+                ElevatedButton(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: const <Widget>[
+                      Text('Authenticate'),
+                      Icon(Icons.perm_device_information),
+                    ],
+                  ),
+                  onPressed: _authenticate,
+                ),
+              // ElevatedButton(
+              //   child: Row(
+              //     mainAxisSize: MainAxisSize.min,
+              //     children: <Widget>[
+              //       Text(_isAuthenticating
+              //           ? 'Cancel'
+              //           : 'Authenticate: biometrics only'),
+              //       const Icon(Icons.fingerprint),
+              //     ],
+              //   ),
+              //   onPressed: _authenticateWithBiometrics,
+              // ),
+              //   ],
+              // ),
+              // TODO: use a boolean value here
+              if (_authorized == 'Authorized')
+                // Column(
+                //   children: [
+                ElevatedButton(
+                  child: const Text('Sign in with no code exchange'),
+                  onPressed: () => _signInWithNoCodeExchange(),
+                ),
+              ElevatedButton(
+                child: const Text('Exchange code'),
+                onPressed: _authorizationCode != null
+                    ? () => _exchangeCode(_appState)
+                    : null,
+              ),
+              ElevatedButton(
+                child: const Text('Sign in with auto code exchange'),
+                onPressed: () => _signInWithAutoCodeExchange(_appState),
+              ),
+              if (Platform.isIOS)
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    child: const Text(
+                      'Sign in with auto code exchange using ephemeral session (iOS only)',
+                      textAlign: TextAlign.center,
+                    ),
+                    onPressed: () => _signInWithAutoCodeExchange(_appState,
+                        preferEphemeralSession: true),
+                  ),
+                ),
+              ElevatedButton(
+                child: const Text('Refresh token'),
+                onPressed:
+                    _refreshToken != null ? () => _refresh(_appState) : null,
+              ),
+              ElevatedButton(
+                child: const Text('End session'),
+                onPressed: _idToken != null
+                    ? () async {
+                        await _endSession(_appState);
+                      }
+                    : null,
+              ),
+              const Text('authorization code'),
+              TextField(
+                controller: _authorizationCodeTextController,
+              ),
+              const Text('access token'),
+              TextField(
+                controller: _accessTokenTextController,
+              ),
+              const Text('access token expiration'),
+              TextField(
+                controller: _accessTokenExpirationTextController,
+              ),
+              const Text('id token'),
+              TextField(
+                controller: _idTokenTextController,
+              ),
+              const Text('refresh token'),
+              TextField(
+                controller: _refreshTokenTextController,
+              ),
+              const Text('test api results'),
+              Text(_userInfo ?? ''),
+              //   ],
+              // )
+            ],
           ),
         ),
       ),
